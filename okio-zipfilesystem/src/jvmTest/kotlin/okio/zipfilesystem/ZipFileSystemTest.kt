@@ -1,5 +1,7 @@
 package okio.zipfilesystem
 
+import kotlin.random.Random
+import kotlin.test.assertFailsWith
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone.Companion.currentSystemDefault
@@ -12,8 +14,6 @@ import okio.Path.Companion.toPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import kotlin.random.Random
-import kotlin.test.assertFailsWith
 
 @ExperimentalFileSystem
 class ZipFileSystemTest {
@@ -40,6 +40,13 @@ class ZipFileSystemTest {
 
     assertThat(zipFileSystem.read("directory/subdirectory/child.txt".toPath()) { readUtf8() })
       .isEqualTo("Another file!")
+
+    assertThat(zipFileSystem.list("/".toPath()))
+      .hasSameElementsAs(listOf("/hello.txt".toPath(), "/directory".toPath()))
+    assertThat(zipFileSystem.list("/directory".toPath()))
+      .containsExactly("/directory/subdirectory".toPath())
+    assertThat(zipFileSystem.list("/directory/subdirectory".toPath()))
+      .containsExactly("/directory/subdirectory/child.txt".toPath())
   }
 
   /**
