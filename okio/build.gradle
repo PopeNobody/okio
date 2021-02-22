@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 30
+        targetSdkVersion 30
+        versionCode 40000
+        versionName "4.00.00"
+        consumerProguardFiles "release-proguard.pro"
+    }
+
+    packagingOptions {
+        exclude '**/BuildConfig.class'
+        exclude '**/NOTICE'
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+  implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
+  implementation project(':javax.annotation')
+  implementation project(':animal-sniffer:animal-sniffer')
+  implementation project(':animal-sniffer:animal-sniffer-annotations')
+  implementation 'com.google.code.findbugs:annotations:2.0.3'
+  implementation 'junit:junit:4.13.2'
+}
